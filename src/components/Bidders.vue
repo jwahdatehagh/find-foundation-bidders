@@ -68,6 +68,7 @@
 <script>
 import { fetchBids } from '../api'
 import { arrayToCsv } from '../helpers/csv'
+import { format } from '../helpers/date'
 import { downloadBlob } from '../helpers/download'
 import Bid from './Bid.vue'
 const params = new URLSearchParams(window.location.search)
@@ -143,14 +144,23 @@ export default {
 
       this.loading = false
     },
+
     download () {
       const csv = arrayToCsv(
         ([
-          ['address', 'bids']
+          [
+            'address', 'bids', 'earliest_date', 'earliest_amount',
+            'latest_date', 'latest_amount', 'highest_bid'
+          ]
         ]).concat(
           this.bidders.map(b => [
             b.id,
             b.bids.length,
+            format(b.earliestBid.datePlaced),
+            b.earliestBid.amountInETH,
+            format(b.latestBid.datePlaced),
+            b.latestBid.amountInETH,
+            b.highestBid.amountInETH,
           ])
         )
       )

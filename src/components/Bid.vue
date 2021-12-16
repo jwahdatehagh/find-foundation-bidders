@@ -12,7 +12,8 @@
 </span>
 </template>
 
-<script>
+<script>import { format } from '../helpers/date'
+
 export default {
   props: {
     bid: Object,
@@ -35,7 +36,7 @@ export default {
     },
 
     formattedDate () {
-      return (new Date(this.bid.datePlaced * 1000)).toLocaleDateString()
+      return format(this.bid.datePlaced)
     },
   },
 }
