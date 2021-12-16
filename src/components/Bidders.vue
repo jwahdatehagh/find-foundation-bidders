@@ -157,10 +157,10 @@ export default {
             b.id,
             b.bids.length,
             format(b.earliestBid.datePlaced),
-            b.earliestBid.amountInETH,
+            parseFloat(b.earliestBid.amountInETH),
             format(b.latestBid.datePlaced),
-            b.latestBid.amountInETH,
-            b.highestBid.amountInETH,
+            parseFloat(b.latestBid.amountInETH),
+            parseFloat(b.highestBid.amountInETH),
           ])
         )
       )
