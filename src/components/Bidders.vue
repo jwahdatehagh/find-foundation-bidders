@@ -114,7 +114,7 @@ export default {
         }
 
         // Add higher bid
-        if (bid.amountInETH > bidders[bid.bidder.id].highestBid.amountInETH) {
+        if (parseFloat(bid.amountInETH) > parseFloat(bidders[bid.bidder.id].highestBid.amountInETH)) {
           bidders[bid.bidder.id].highestBid = bid
         }
 
