@@ -24,9 +24,9 @@
             {{ bidder.id }}
           </a>
         </p>
-        <p>Earliest: <Bid :bid="bidder.earliestBid" date value /></p>
-        <p>Latest: <Bid :bid="bidder.latestBid" date value /></p>
-        <p>Highest:  <Bid :bid="bidder.highestBid" date value /></p>
+        <p>Earliest: <Bid :bid="bidder.earliestBid" value date tx /></p>
+        <p>Latest: <Bid :bid="bidder.latestBid" value date tx /></p>
+        <p>Highest:  <Bid :bid="bidder.highestBid" value date tx /></p>
         <p class="bids">
           on:
           <Bid

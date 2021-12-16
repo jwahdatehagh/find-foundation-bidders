@@ -6,6 +6,9 @@
   >#{{ id }}</a>
   <span v-if="value"> for {{ bid.amountInETH }} ETH </span>
   <span v-if="date"> on {{ formattedDate }}</span>
+  <span v-if="tx">
+    (<a :href="`https://etherscan.io/tx/${bid.transactionHashPlaced}`" target="_blank">tx</a>)
+  </span>
 </span>
 </template>
 
@@ -13,14 +16,9 @@
 export default {
   props: {
     bid: Object,
-    value: {
-      type: Boolean,
-      default: false,
-    },
-    date: {
-      type: Boolean,
-      default: false,
-    }
+    value: Boolean,
+    date: Boolean,
+    tx: Boolean,
   },
 
   computed: {
