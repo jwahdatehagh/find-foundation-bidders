@@ -17,6 +17,7 @@ export const fetchBids = async address => {
     ) {
       id
       amountInETH
+      datePlaced
       transactionHashPlaced
       bidder {
         id

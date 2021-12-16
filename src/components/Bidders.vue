@@ -6,7 +6,6 @@
     <button type="submit">Search</button>
   </form>
 
-
   <p v-if="loading">Loading...</p>
   <p v-else-if="! bids.length">No bidders found</p>
   <article v-else>
@@ -25,15 +24,16 @@
             {{ bidder.id }}
           </a>
         </p>
+        <p>Earliest: <Bid :bid="bidder.earliestBid" date value /></p>
+        <p>Latest: <Bid :bid="bidder.latestBid" date value /></p>
+        <p>Highest:  <Bid :bid="bidder.highestBid" date value /></p>
         <p class="bids">
           on:
-          <a
+          <Bid
             v-for="bid in bidder.bids"
             :key="bid.id"
-            :href="`https://opensea.io/assets/${bid.nft.id.split('-')[0]}/${bid.nft.id.split('-')[1]}`"
-            target="_blank"
-            class="bid"
-          >#{{ bid.nft.id.split('-')[1] }}</a>
+            :bid="bid"
+          />
         </p>
       </li>
     </ul>
@@ -69,9 +69,14 @@
 import { fetchBids } from '../api'
 import { arrayToCsv } from '../helpers/csv'
 import { downloadBlob } from '../helpers/download'
+import Bid from './Bid.vue'
 const params = new URLSearchParams(window.location.search)
 
 export default {
+  components: {
+    Bid,
+  },
+
   data () {
     const seller = params.get('seller')
 
@@ -88,11 +93,29 @@ export default {
         if (! bidders[bid.bidder.id]) {
           bidders[bid.bidder.id] = {
             id: bid.bidder.id,
+            earliestBid: bid,
+            latestBid: bid,
+            highestBid: bid,
             bids: [],
           }
         }
 
         bidders[bid.bidder.id].bids.push(bid)
+
+        // Add earlier bid
+        if (bid.datePlaced < bidders[bid.bidder.id].earliestBid.datePlaced) {
+          bidders[bid.bidder.id].earliestBid = bid
+        }
+
+        // Add later bid
+        if (bid.datePlaced > bidders[bid.bidder.id].latestBid.datePlaced) {
+          bidders[bid.bidder.id].latestBid = bid
+        }
+
+        // Add higher bid
+        if (bid.amountInETH > bidders[bid.bidder.id].highestBid.amountInETH) {
+          bidders[bid.bidder.id].highestBid = bid
+        }
 
         return bidders
       }, {})
