@@ -28,11 +28,12 @@
         <p>Latest: <Bid :bid="bidder.latestBid" value date tx /></p>
         <p>Highest:  <Bid :bid="bidder.highestBid" value date tx /></p>
         <p class="bids">
-          on:
-          <Bid
-            v-for="bid in bidder.bids"
-            :key="bid.id"
-            :bid="bid"
+          All NFTs bid on:
+          <NFT
+            v-for="nft in bidder.nfts"
+            :key="nft.id"
+            :nft="nft"
+            count
           />
         </p>
       </li>
@@ -71,11 +72,13 @@ import { arrayToCsv } from '../helpers/csv'
 import { format } from '../helpers/date'
 import { downloadBlob } from '../helpers/download'
 import Bid from './Bid.vue'
+import NFT from './NFT.vue'
 const params = new URLSearchParams(window.location.search)
 
 export default {
   components: {
     Bid,
+    NFT,
   },
 
   data () {
@@ -98,6 +101,7 @@ export default {
             latestBid: bid,
             highestBid: bid,
             bids: [],
+            nfts: [],
           }
         }
 
@@ -116,6 +120,17 @@ export default {
         // Add higher bid
         if (parseFloat(bid.amountInETH) > parseFloat(bidders[bid.bidder.id].highestBid.amountInETH)) {
           bidders[bid.bidder.id].highestBid = bid
+        }
+
+        // Add NFTs
+        const nft = bidders[bid.bidder.id].nfts.find(n => n.id === bid.nft.id)
+        if (! nft) {
+          bidders[bid.bidder.id].nfts.push({
+            ...bid.nft,
+            bids: [ bid ],
+          })
+        } else {
+          nft.bids.push(bid)
         }
 
         return bidders
